@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+          content="A layout example that shows off a responsive tornado layout.">
+    <title>API REST TORNADO</title>
+    <link rel="stylesheet"
+          href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="{{static_url('css/tornado-old-ie.css')}}">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="{{ static_url('css/tornado.css')}}">
+    <!--<![endif]-->
+</head>
+<body>
+<div id="layout" class="content pure-g">
+    <div id="nav" class="pure-u">
+        <a href="#" class="nav-menu-button">Modules</a>
+
+        <div class="nav-inner">
+            <div class="pure-menu">
+                <button class="primary-button pure-button">Modules</button>
+                <ul class="pure-menu-list">
+                    {% for k in paths %}
+                    <li id="{{k}}"
+                        class="pure-menu-item {% if k == list(paths.keys())[0] %}selected{% end %}">
+                        <a href="#" class="pure-menu-link">{{k}}</a></li>
+                    {% end %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="list" class="pure-u-1">
+        {% for k, v in paths.items() %}
+        {% for v1 in v %}
+        <div class="tornado-item {% if k != list(paths.keys())[0] %}hidden{% end %} {{k}} pure-g">
+            <div class="pure-u">
+                <h4 class="tornado-subject">{{v1}}</h4>
+            </div>
+        </div>
+        {% end %}
+        {% end %}
+    </div>
+
+    <div id="main" class="pure-u hidden">
+        <div class="tornado-content">
+            <div class="tornado-content-header pure-g">
+                <div class="pure-u">
+                    <h1 class="tornado-content-title">Description of the service structure</h1>
+                    <p id="content-tittle" class="tornado-content-subtitle"></p>
+                </div>
+            </div>
+
+            <div class="tornado-content-body">
+                <iframe id="frame" src="" width="100%" height="300">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="http://yui.yahooapis.com/3.17.2/build/yui/yui-min.js"></script>
+<script>
+    YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+        var menuButton = Y.one('.nav-menu-button'),
+                nav = Y.one('#nav');
+
+        // Setting the active class name expands the menu vertically on small screens.
+        menuButton.on('click', function (e) {
+            nav.toggleClass('active');
+        });
+
+        // Your application code goes here...
+
+    });
+</script>
+
+<script src="{{static_url('js/jquery-3.1.1.min.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        var url = $(location).attr('protocol') +"//"+ $(location).attr('host');
+        each_item = function (obj) {
+            $('#list').children().removeClass("selected");
+            $(obj).addClass("selected");
+        };
+
+        $('#nav .pure-menu-item').on("click", function () {
+            var id = "."+$(this).attr("id");
+            $("#nav .pure-menu-list").children().removeClass("selected");
+            each_item(this);
+            $('#main').addClass("hidden");
+            $('#list').children().addClass("hidden");
+            $(id).removeClass("hidden");
+        });
+
+        $('#list .tornado-item').on("click", function () {
+            service_name = $.trim($(this).text());
+            each_item(this);
+            $("#content-tittle").text(service_name);
+            $("#frame").attr("src", url+service_name);
+            $('#main').removeClass("hidden");
+        });
+    });
+</script>
+</body>
+</html>

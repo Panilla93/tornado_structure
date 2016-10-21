@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HOME</title>
+    <link rel="stylesheet" type="text/css" href="{{static_url('css/beautify-json.css')}}">
+</head>
+<body>
+<div class="container">
+    <div class="json">{{docs}}</div>
+</div>
+
+<script src="{{static_url('js/jquery-3.1.1.min.js')}}"></script>
+<script src="{{static_url('js/jquery.beautify-json.js')}}"></script>
+<script>
+    $('.json').beautifyJSON({
+        type: "strict"
+    });
+</script>
+</body>
+</html>
